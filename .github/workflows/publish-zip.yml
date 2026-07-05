@@ -22,12 +22,10 @@ jobs:
       - name: Create zip archive
         run: |
           mkdir dist
-          zip -X dist/pyxel_custom_font.zip \
-            .pyxapp_startup_script \
-            main.py \
-            my_resource.pyxres \
-            assets/PixelMplus12-Regular.ttf \
-            assets/umplus_j10r.bdf
+          mkdir pyxel_custom_font
+          cp .pyxapp_startup_script main.py my_resource.pyxres pyxel_custom_font/
+          cp -r assets pyxel_custom_font/
+          zip -X -r dist/pyxel_custom_font.zip pyxel_custom_font
 
       - name: Publish to dist branch
         uses: peaceiris/actions-gh-pages@v4
