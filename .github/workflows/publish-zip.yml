@@ -1,0 +1,35 @@
+name: Publish zip archive
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - main.py
+      - my_resource.pyxres
+      - .pyxapp_startup_script
+      - assets/**
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Create zip archive
+        run: |
+          mkdir dist
+          zip -X dist/pyxel_custom_font.zip \
+            .pyxapp_startup_script \
+            main.py \
+            my_resource.pyxres \
+            assets/PixelMplus12-Regular.ttf \
+            assets/umplus_j10r.bdf
+
+      - name: Publish to dist branch
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+          publish_branch: dist
+          keep_files: false
